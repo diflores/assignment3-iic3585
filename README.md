@@ -1,1 +1,2 @@
-# assignment3-iic3585
+# Assignment 3: WebAssembly
+By: Daniela Flores – Javiera Jorquera
