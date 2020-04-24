@@ -1,0 +1,12 @@
+{
+  "name": "assignment3-iic3585",
+  "version": "1.0.0",
+  "description": "A Sudoku Solver ported to WASM",
+  "main": "index.js",
+  "repository": "https://github.com/diflores/assignment3-iic3585",
+  "author": "Daniela Flores and Javiera Jorquera",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "http-server": "^0.12.1"
+  }
+}
