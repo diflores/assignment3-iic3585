@@ -9,8 +9,8 @@ emcc sudoku.c -s EXPORTED_FUNCTIONS='["_solveSudoku"]' -s EXTRA_EXPORTED_RUNTIME
 
 ## How to run locally
 1. `yarn install`.
-2. `yarn run http-server`.
-3. Open http://127.0.0.1:8080 in your browser.
+2. `yarn run serve`.
+3. Open http://127.0.0.1:5000 in your browser.
 4. Enjoy!
 
 ## Live Demo

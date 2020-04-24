@@ -7,6 +7,6 @@
   "author": "Daniela Flores and Javiera Jorquera",
   "license": "Apache-2.0",
   "dependencies": {
-    "http-server": "^0.12.1"
+    "serve": "^11.3.0"
   }
 }
