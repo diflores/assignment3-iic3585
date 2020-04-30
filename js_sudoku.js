@@ -2,8 +2,8 @@ const findEmptyCell = (board, currentPosition) => {
   for (let row = 0; row < 9; row++) {
     for (let col = 0; col < 9; col++) {
       if (board[row][col] == 0) {
-        currentPosition[0] = i;
-        currentPosition[1] = j;
+        currentPosition[0] = row;
+        currentPosition[1] = col;
         return true;
       }
     }
