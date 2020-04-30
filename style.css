@@ -47,3 +47,10 @@ input {
     background-color: green;
     color: white;
 }
+#time-elapsed-container {
+    text-align: center;
+    display: hidden;
+}
+#time-elapsed-starting-text{
+    display: hidden;
+}
