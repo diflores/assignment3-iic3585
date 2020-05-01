@@ -65,32 +65,27 @@ const solveHexadoku = (array) => {
 	return -1;
 };
 
-function sayHello(){
-    let k = '2...1...........................................................................................................................................................................................................................................................';
-    let expert = '.5...D...A...6.F.3....B0.95...CD.1.7F49A..D...3.B.....5....7.8.......0A2.6..9....49.....F......B1E75..8D..9.0.....6.3...D8...2.4D....6..97.28.........2..E3........8A1.5.0.......6E.....5.....7...5B6........A.....0.....B.654.12A.9.7...41...0.87..5....2..ECB.';
-    
-    let j = solveHexadoku(expert);
-    if(j!=-1){
-		j=j.join("");
-    console.log(j);
-    }
-}
-
 const solve = () => {
   const startTime = performance.now();
-  const flattenSudoku = [];
+  const inputSudoku = [];
   [...Array(256).keys()].map(i => {
-    const value = parseInt(document.getElementById(`cell-${i}`).value);
-    value ? flattenSudoku.push(value) : flattenSudoku.push('.');
+		const value = document.getElementById(`cell-${i}`).value;
+    value ? inputSudoku.push(value) : inputSudoku.push('.');
 	});
-	const k = '2...1...........................................................................................................................................................................................................................................................';
+	const sudoku = inputSudoku.map(
+		(value) => Number.isInteger(value) ? value.toString() : value.toUpperCase()
+	).join('');
+
+	// este demora 17 segundos
+	const easy = '2...1.....................................F..................................D........................................9..................A..................................8........................G.............................................5............';
+	// este nunca termina
 	const expert = '.5...D...A...6.F.3....B0.95...CD.1.7F49A..D...3.B.....5....7.8.......0A2.6..9....49.....F......B1E75..8D..9.0.....6.3...D8...2.4D....6..97.28.........2..E3........8A1.5.0.......6E.....5.....7...5B6........A.....0.....B.654.12A.9.7...41...0.87..5....2..ECB.';
-	let result = solveHexadoku(flattenSudoku.join(''));
+
+	let result = solveHexadoku(sudoku);
   if (result != -1) {
 		result = result.join('');
-		console.log(result);
 		[...Array(256).keys()].map(i => {
-			if (flattenSudoku[i] === '.') {
+			if (sudoku[i] === '.') {
 				document.getElementById(`cell-${i}`).classList.add("filled");
 			}
 			document.getElementById(`cell-${i}`).value = result[i];
