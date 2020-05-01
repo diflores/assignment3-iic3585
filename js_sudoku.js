@@ -75,6 +75,7 @@ const solveSudoku = (board) => {
 };
 
 const solve = () => {
+  const startTime = performance.now();
   const flattenSudoku = [];
   [...Array(81).keys()].map(i => {
     const value = parseInt(document.getElementById(`cell-${i}`).value);
@@ -97,6 +98,15 @@ const solve = () => {
     document.getElementById(`cell-${i}`).value = resultArray[i];
     document.getElementById(`cell-${i}`).disabled = true;
   });
+  const endTime = performance.now();
+  const totalTime = endTime - startTime;
+  const solvingTimePre = "Solving time using WASM: &nbsp";
+  const solvingTimeText = `${totalTime/1000} seconds.`;
+  document.getElementById("time-elapsed-container").style.display = "flex";
+  document.getElementById("time-elapsed-container").style.justifyContent = "center";
+  document.getElementById("time-elapsed-pre-text").innerHTML = solvingTimePre;
+  document.getElementById("time-elapsed-text").innerHTML = solvingTimeText;
+  document.getElementById("time-elapsed-text").style.color = "green";
 };
 
 const clearGrid = () => {
@@ -105,4 +115,9 @@ const clearGrid = () => {
     element.disabled = false;
     element.classList.remove("filled");
   });
+  document.getElementById("time-elapsed-container").style.display = "hidden";
+  document.getElementById("time-elapsed-container").style.justifyContent = null;
+  document.getElementById("time-elapsed-pre-text").innerHTML = "";
+  document.getElementById("time-elapsed-text").innerHTML = "";
+  document.getElementById("time-elapsed-text").style.color = "green";
 };
