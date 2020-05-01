@@ -107,3 +107,16 @@ const solve = () => {
   document.getElementById("time-elapsed-text").innerHTML = solvingTimeText;
   document.getElementById("time-elapsed-text").style.color = "green";
 };
+
+const clearGrid = () => {
+  [...document.getElementsByTagName("input")].forEach(element => {
+    element.value = "";
+    element.disabled = false;
+    element.classList.remove("filled");
+  });
+  document.getElementById("time-elapsed-container").style.display = "hidden";
+  document.getElementById("time-elapsed-container").style.justifyContent = null;
+  document.getElementById("time-elapsed-pre-text").innerHTML = "";
+  document.getElementById("time-elapsed-text").innerHTML = "";
+  document.getElementById("time-elapsed-text").style.color = "green";
+};
