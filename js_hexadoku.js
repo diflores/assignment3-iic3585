@@ -90,7 +90,7 @@ const solve = () => {
 		result = result.join('');
 		console.log(result);
 		[...Array(256).keys()].map(i => {
-			if (result[i] === 0) {
+			if (flattenSudoku[i] === '.') {
 				document.getElementById(`cell-${i}`).classList.add("filled");
 			}
 			document.getElementById(`cell-${i}`).value = result[i];
