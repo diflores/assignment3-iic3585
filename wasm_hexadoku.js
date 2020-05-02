@@ -10,7 +10,6 @@ const solve = () => {
   const flatStr = flattenSudoku.join("");
   console.log(flatStr);
   solveSudoku = Module.cwrap("solveHexadoku", "string", ["string"]);
-  data = new Uint8ClampedArray(flattenSudoku);
   const result = solveSudoku(flatStr);
   const endTime = performance.now();
   [...result].forEach((_, index) => {
