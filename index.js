@@ -8,7 +8,7 @@ const solve = () => {
     value ? flattenSudoku.push(value) : flattenSudoku.push(0);
   });
   solveSudoku = Module.cwrap("solveSudoku", "number", ["number"]);
-  data = new Int32Array(flattenSudoku);
+  const data = new Int32Array(flattenSudoku);
   const nDataBytes = data.length * data.BYTES_PER_ELEMENT;
   const dataPtr = Module._malloc(nDataBytes);
   const dataHeap = new Uint8Array(Module.HEAPU8.buffer, dataPtr, nDataBytes);
