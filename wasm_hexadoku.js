@@ -3,38 +3,28 @@
 const solve = () => {
   const startTime = performance.now();
   const flattenSudoku = [];
-  [...Array(81).keys()].map(i => {
+  [...Array(256).keys()].map(i => {
     const value = parseInt(document.getElementById(`cell-${i}`).value);
-    value ? flattenSudoku.push(value) : flattenSudoku.push(0);
+    value ? flattenSudoku.push(value) : flattenSudoku.push(".");
   });
-  solveSudoku = Module.cwrap("solveSudoku", "number", ["number"]);
-  const data = new Int32Array(flattenSudoku);
-  const nDataBytes = data.length * data.BYTES_PER_ELEMENT;
-  const dataPtr = Module._malloc(nDataBytes);
-  const dataHeap = new Uint8Array(Module.HEAPU8.buffer, dataPtr, nDataBytes);
-  dataHeap.set(new Uint8Array(data.buffer));
-  solveSudoku(dataHeap.byteOffset);
-  const result = new Int32Array(
-    dataHeap.buffer,
-    dataHeap.byteOffset,
-    data.length
-  );
-  // Free memory
-  Module._free(dataHeap.byteOffset);
-  const resultArray = Array.from(result);
-  [...Array(81).keys()].map(i => {
-    if (flattenSudoku[i] === 0) {
-      document.getElementById(`cell-${i}`).classList.add("filled");
-    }
-    document.getElementById(`cell-${i}`).value = resultArray[i];
-    document.getElementById(`cell-${i}`).disabled = true;
-  });
+  const flatStr = flattenSudoku.join("");
+  console.log(flatStr);
+  solveSudoku = Module.cwrap("solveHexadoku", "string", ["string"]);
+  const result = solveSudoku(flatStr);
   const endTime = performance.now();
+  [...result].forEach((_, index) => {
+    if (flattenSudoku[index] === ".") {
+      document.getElementById(`cell-${index}`).classList.add("filled");
+    }
+    document.getElementById(`cell-${index}`).value = result[index];
+    document.getElementById(`cell-${index}`).disabled = true;
+  });
   const totalTime = endTime - startTime;
-  const solvingTimePre = "Solving time using WASM: &nbsp";
-  const solvingTimeText = `${totalTime/1000} seconds.`;
+  const solvingTimePre = "Solving time using JS: &nbsp";
+  const solvingTimeText = `${totalTime / 1000} seconds.`;
   document.getElementById("time-elapsed-container").style.display = "flex";
-  document.getElementById("time-elapsed-container").style.justifyContent = "center";
+  document.getElementById("time-elapsed-container").style.justifyContent =
+    "center";
   document.getElementById("time-elapsed-pre-text").innerHTML = solvingTimePre;
   document.getElementById("time-elapsed-text").innerHTML = solvingTimeText;
   document.getElementById("time-elapsed-text").style.color = "green";
