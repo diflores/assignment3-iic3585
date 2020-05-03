@@ -2,13 +2,14 @@
 
 const solve = () => {
   const startTime = performance.now();
-  const flattenSudoku = [];
+  let flattenSudoku = [];
   [...Array(256).keys()].map(i => {
-    const value = parseInt(document.getElementById(`cell-${i}`).value);
+    const value = document.getElementById(`cell-${i}`).value;
     value ? flattenSudoku.push(value) : flattenSudoku.push(".");
   });
-  const flatStr = flattenSudoku.join("");
-  console.log(flatStr);
+  const flatStr = flattenSudoku.map(
+		(value) => Number.isInteger(value) ? value.toString() : value.toUpperCase()
+	).join('');
   solveSudoku = Module.cwrap("solveHexadoku", "string", ["string"]);
   const result = solveSudoku(flatStr);
   const endTime = performance.now();
