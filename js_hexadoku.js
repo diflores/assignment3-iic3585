@@ -1,78 +1,89 @@
-const sameRow = (i,j) => Math.floor(i/16) === Math.floor(j/16);
+const hexaChars = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'];
 
-const sameCol = (i,j) => ((i - j) % 16 === 0);
-
-const sameBlock = (i,j) => (
-	(Math.floor((i / (4 * 4 * 4)))) === (Math.floor(j / (4 * 4 * 4))) && (Math.floor((i % 16) / 4)) === (Math.floor((j % 16) / 4))
-);
-
-const verify = (output) => {
-	for (let i = 0; i < 256; i++) {
-		for (let j = 0; j < 256; j++) {
-			if (sameRow(i, j) || sameCol(i, j) || sameBlock(i, j)) {
-				if (output[i] === output[j] && i != j) {
-					return false;
-				}
-			}
-		}
-	}
-	return true;
+const findEmptyCell = (board, currentPosition) => {
+  for (let row = 0; row < 16; row++) {
+    for (let col = 0; col < 16; col++) {
+      if (board[row][col] === '.') {
+        currentPosition[0] = row;
+        currentPosition[1] = col;
+        return true;
+      }
+    }
+  }
+  return false;
 };
 
-const find = (array, current) => {
-	for (let i = 0; i < array.length; i++) {
-		if (array[i] == current) {
-			return i;
-		}
-	}
-	return -1;
+const usedInRow = (board, row, number) => {
+  for (let col = 0; col < 16; col++) {
+    if (board[row][col] === number) {
+      return true;
+    }
+  }
+  return false;
 };
 
-const solveHexadoku = (array) => {
-	const i = find(array, '.');
-	if (i < 0) {
-		const isVerified = verify(array);
-		if (isVerified){
-			return array;
-		} else {
-			console.log('There is no valid solution');
-			return -1;
-		}
-	}
+const usedInCol = (board, col, number) => {
+  for (let row = 0; row < 16; row++) {
+    if (board[row][col] === number) {
+      return true;
+    }
+  }
+  return false;
+};
 
-	const ex_num = [];
-	for (let j = 0; j < (16 * 16); j++) {
-		if (sameRow(i, j) || sameCol(i, j) || sameBlock(i, j)) {
-			ex_num.push(array[j]);
-		}
-	}
+const usedIn4x4 = (board, row, col, number) => {
+  for (let i = 0; i < 4; i++) {
+    for (let j = 0; j < 4; j++) {
+      if (board[i + row][j + col] === number) {
+        return true;
+      }
+    }
+  }
+  return false;
+};
 
-	const c = "0123456789ABCDEF";
-	for (let j = 0; j < c.length; j++) {
-		const found = find(ex_num, c[j]);
-		if (found < 0){
-			const rec_val = [];
-			for (let x = 0; x < array.length; x++) {
-				rec_val.push(array[x]);
-			}
-			rec_val[i] = c[j];
-			const tmp = solveHexadoku(rec_val);
-			if (tmp != -1) {
-				return tmp;
-			}
-		}
-	}
-	return -1;
+const isValidNumber = (board, row, col, number) => {
+  return (board[row][col] === '.' && !usedIn4x4(board, row - row % 4, col - col % 4, number) && !usedInRow(board, row, number) && !usedInCol(board, col, number));
+};
+
+const isSolved = (board) => {
+  const position = [0, 0]
+  if (!findEmptyCell(board, position)) {
+    return true;
+  }
+  for (let value = 0; value < 16; value++) {
+    const row = position[0];
+    const col = position[1];
+    if (isValidNumber(board, row, col, hexaChars[value])) {
+      board[row][col] = hexaChars[value];
+      if (isSolved(board)) {
+        return true;
+      }
+      board[row][col] = '.';
+    }
+  }
+  return false;
+};
+
+const solveSudoku = (board) => {
+  isSolved(board);
+  flatBoard = Array(256);
+  for (let row = 0; row < 16; row++) {
+    for (let col = 0; col < 16; col++){
+      flatBoard[16 * row + col] = board[row][col];
+    }
+  }
+  return flatBoard;
 };
 
 const solve = () => {
   const startTime = performance.now();
-  const inputSudoku = [];
+  let flattenSudoku = [];
   [...Array(256).keys()].map(i => {
 		const value = document.getElementById(`cell-${i}`).value;
-    value ? inputSudoku.push(value) : inputSudoku.push('.');
+    value ? flattenSudoku.push(value) : flattenSudoku.push('.');
 	});
-	const sudoku = inputSudoku.map(
+	flattenSudoku = flattenSudoku.map(
 		(value) => Number.isInteger(value) ? value.toString() : value.toUpperCase()
 	).join('');
 
@@ -81,17 +92,29 @@ const solve = () => {
 	// este nunca termina
 	const expert = '.5...D...A...6.F.3....B0.95...CD.1.7F49A..D...3.B.....5....7.8.......0A2.6..9....49.....F......B1E75..8D..9.0.....6.3...D8...2.4D....6..97.28.........2..E3........8A1.5.0.......6E.....5.....7...5B6........A.....0.....B.654.12A.9.7...41...0.87..5....2..ECB.';
 
-	let result = solveHexadoku(sudoku);
-  if (result != -1) {
-		result = result.join('');
-		[...Array(256).keys()].map(i => {
-			if (sudoku[i] === '.') {
-				document.getElementById(`cell-${i}`).classList.add("filled");
-			}
-			document.getElementById(`cell-${i}`).value = result[i];
-			document.getElementById(`cell-${i}`).disabled = true;
-		});
-	}
+	const matrixSudoku = [];
+	const easySudoku = [];
+	const expertSudoku = [];
+  for (let row = 0; row < 16; row++) {
+		matrixSudoku.push(Array(16));
+		easySudoku.push(Array(16));
+		expertSudoku.push(Array(16));
+  }
+  for (let row = 0; row < 16; row++) {
+    for (let col = 0; col < 16; col++){
+			matrixSudoku[row][col] = flattenSudoku[16 * row + col];
+			easySudoku[row][col] = easy[16 * row + col];
+			expertSudoku[row][col] = expert[16 * row + col];
+    }
+  }
+	const resultArray = solveSudoku(matrixSudoku);
+	[...Array(256).keys()].map(i => {
+    if (flattenSudoku[i] === '.') {
+      document.getElementById(`cell-${i}`).classList.add("filled");
+    }
+    document.getElementById(`cell-${i}`).value = resultArray[i];
+    document.getElementById(`cell-${i}`).disabled = true;
+  });
   const endTime = performance.now();
   const totalTime = endTime - startTime;
   const solvingTimePre = "Solving time using JS: &nbsp";
