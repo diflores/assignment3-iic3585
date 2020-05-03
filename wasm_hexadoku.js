@@ -21,7 +21,7 @@ const solve = () => {
     document.getElementById(`cell-${index}`).disabled = true;
   });
   const totalTime = endTime - startTime;
-  const solvingTimePre = "Solving time using JS: &nbsp";
+  const solvingTimePre = "Solving time using WASM: &nbsp";
   const solvingTimeText = `${totalTime / 1000} seconds.`;
   document.getElementById("time-elapsed-container").style.display = "flex";
   document.getElementById("time-elapsed-container").style.justifyContent =
