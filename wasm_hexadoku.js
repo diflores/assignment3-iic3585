@@ -2,7 +2,7 @@
 
 const solve = () => {
   const startTime = performance.now();
-  let flattenSudoku = [];
+  const flattenSudoku = [];
   [...Array(256).keys()].map(i => {
     const value = document.getElementById(`cell-${i}`).value;
     value ? flattenSudoku.push(value) : flattenSudoku.push(".");
