@@ -54,3 +54,23 @@ input {
 #time-elapsed-starting-text{
     display: hidden;
 }
+
+#links-container {
+    padding-top: 1em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+a.button {
+    -webkit-appearance: button;
+    -moz-appearance: button;
+    text-decoration: none;
+    color: white;
+    background-color: seagreen;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+}
