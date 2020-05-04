@@ -4,7 +4,9 @@ By: Daniela Flores – Javiera Jorquera
 ## About
 This Sudoku Solver was coded in C and then ported to WASM with [Emscripten](https://emscripten.org/). To compile it yourself, run:
 ```sh
-emcc sudoku.c -s EXPORTED_FUNCTIONS='["_solveSudoku"]' -s EXTRA_EXPORTED_RUNTIME_METHODS='["ccall", "cwrap"]' -o sudoku.js
+$ cd c_code
+$ emcc sudoku.c -s EXPORTED_FUNCTIONS='["_solveSudoku"]' -s EXTRA_EXPORTED_RUNTIME_METHODS='["ccall", "cwrap"]' -o sudoku.js
+$ emcc hexadoku.c -s EXPORTED_FUNCTIONS='["_solveHexadoku"]' -s EXTRA_EXPORTED_RUNTIME_METHODS='["ccall", "cwrap"]' -o hexadoku.js
 ```
 
 ## How to run locally
